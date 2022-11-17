@@ -56,7 +56,7 @@ function App() {
       }
     );
     setPlaylists(data.items);
-    setTitle("Chose one...");
+    setTitle("Chose one playlist to sort...");
   };
 
   const renderPlaylists = () => {
@@ -120,7 +120,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>{title}</h1>
+        <h2>{title}</h2>
         {playlists && token && (
           <div className="playlists-container">{renderPlaylists()}</div>
         )}
