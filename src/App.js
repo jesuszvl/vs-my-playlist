@@ -6,7 +6,7 @@ const DEFAULT_TITLE = "Versus My Playlist";
 
 function App() {
   const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
-  const REDIRECT_URI = "https://jesuszvl.github.io/spotify-react/";
+  const REDIRECT_URI = "https://jesuszvl.github.io/spotify-react";
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
   const RESPONSE_TYPE = "token";
   const SCOPE = "playlist-read-private";
