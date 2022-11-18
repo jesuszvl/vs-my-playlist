@@ -6,14 +6,13 @@ const DEFAULT_TITLE = "Versus My Playlist";
 
 function App() {
   const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
-  const REDIRECT_URI = "https://jesuszvl.github.io/spotify-react/";
+  const REDIRECT_URI = "http://localhost:3000";
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
   const RESPONSE_TYPE = "token";
   const SCOPE = "playlist-read-private";
 
   const [token, setToken] = useState("");
   const [playlists, setPlaylists] = useState([]);
-  const [versusPlaylist, setVersusPlaylist] = useState("");
   const [tracks, setTracks] = useState([]);
   const [title, setTitle] = useState(DEFAULT_TITLE);
 
@@ -55,8 +54,18 @@ function App() {
         },
       }
     );
-    setPlaylists(data.items);
-    setTitle("Chose one playlist to sort...");
+
+    const filteredPlaylists = data.items.filter(
+      (playlist) =>
+        playlist.tracks.total >= 30 && playlist.owner.id !== "spotify"
+    );
+
+    const sortedPlaylist = filteredPlaylists.sort(
+      (a, b) => a.tracks.total - b.tracks.total
+    );
+
+    setPlaylists(sortedPlaylist);
+    setTitle("Chose one playlist to sort");
   };
 
   const renderPlaylists = () => {

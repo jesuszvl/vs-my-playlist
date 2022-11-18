@@ -23,6 +23,7 @@
 
   height: 20px;
   font-size: 14px;
+  font-weight: 700;
 }
 
 .spotify-logout {
@@ -34,7 +35,8 @@
 
   height: 20px;
   font-size: 14px;
-  margin: 12px;
+  font-weight: 700;
+  margin: 24px;
 }
 
 .playlists-container {
@@ -42,21 +44,27 @@
   flex-direction: column-reverse;
   cursor: pointer;
   border-top: 1px solid rgba(0, 0, 0, 0.5);
+  width: 100%;
 }
 
 .spotify-playlist {
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 16px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 
-  gap: 12px;
+  gap: 16px;
+}
+
+.spotify-playlist:hover {
+  background-color: #1db954;
 }
 
 .playlist-image {
-  height: 70px;
+  height: 80px;
 }
 
 .playlist-title {
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
 }
