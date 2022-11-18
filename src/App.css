@@ -37,6 +37,7 @@
   font-size: 14px;
   font-weight: 700;
   margin: 24px;
+  cursor: pointer;
 }
 
 .playlists-container {
@@ -44,6 +45,13 @@
   flex-direction: column-reverse;
   cursor: pointer;
   border-top: 1px solid rgba(0, 0, 0, 0.5);
+  width: 100%;
+}
+
+.tracks-container {
+  display: flex;
+  flex-direction: column-reverse;
+  cursor: pointer;
   width: 100%;
 }
 

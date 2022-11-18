@@ -15,6 +15,7 @@ function App() {
   const [playlists, setPlaylists] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [title, setTitle] = useState(DEFAULT_TITLE);
+  const [backToPlaylist, setBackToPlaylist] = useState(false);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -74,7 +75,7 @@ function App() {
         <div
           className="spotify-playlist"
           key={playlist.id}
-          onClick={() => onPlaylistClick(playlist.id)}
+          onClick={() => onPlaylistClick(playlist)}
         >
           <img className="playlist-image" src={playlist.images[0].url} alt="" />
           <span className="playlist-title">{playlist.name}</span>
@@ -84,25 +85,22 @@ function App() {
   };
 
   const onPlaylistClick = (playlist) => {
-    console.log(playlist);
+    getPlaylistTracks(playlist);
+    setTitle("Pick the better song");
   };
 
-  const getPlaylistTracks = (playlistId) => {
-    const { data } = axios.get(
-      "https://api.spotify.com/v1/playlists/2NzyWV9sT9rnKMncFHCkJG",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: {
-          uris: [],
-        },
-      }
-    );
+  const getPlaylistTracks = async (playlist) => {
+    const { data } = await axios.get(playlist.tracks.href, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setTracks(data.items);
+    setBackToPlaylist(true);
   };
 
   const onTrackClick = (trackId) => {
-    getPlaylistTracks();
+    console.log(trackId);
   };
 
   const renderTracks = () => {
@@ -116,7 +114,7 @@ function App() {
             width={"150px"}
             src={track.track.album.images[0].url}
             alt=""
-            onClick={onTrackClick(track.track.id)}
+            onClick={() => onTrackClick(track.track.id)}
           />
         ) : (
           <div>No Image</div>
@@ -126,12 +124,20 @@ function App() {
     ));
   };
 
+  const backToPlaylistClick = () => {
+    setTracks([]);
+    setBackToPlaylist(false);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <h2>{title}</h2>
-        {playlists && token && (
+        {playlists.length > 0 && tracks.length === 0 && token && (
           <div className="playlists-container">{renderPlaylists()}</div>
+        )}
+        {tracks.length !== 0 && token && (
+          <div className="tracks-container">{renderTracks()}</div>
         )}
         {!token ? (
           <a
@@ -141,9 +147,16 @@ function App() {
             Login with Spotify
           </a>
         ) : (
-          <button className="spotify-logout" onClick={logout}>
-            Logout
-          </button>
+          <>
+            {backToPlaylist && (
+              <button className="spotify-logout" onClick={backToPlaylistClick}>
+                Back To Playlists
+              </button>
+            )}
+            <button className="spotify-logout" onClick={logout}>
+              Logout
+            </button>
+          </>
         )}
       </header>
     </div>
