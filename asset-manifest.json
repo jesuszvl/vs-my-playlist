@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/spotify-react/static/css/main.333cb425.css",
-    "main.js": "/spotify-react/static/js/main.64002be0.js",
-    "static/js/787.8e4676ea.chunk.js": "/spotify-react/static/js/787.8e4676ea.chunk.js",
-    "index.html": "/spotify-react/index.html",
-    "main.333cb425.css.map": "/spotify-react/static/css/main.333cb425.css.map",
-    "main.64002be0.js.map": "/spotify-react/static/js/main.64002be0.js.map",
-    "787.8e4676ea.chunk.js.map": "/spotify-react/static/js/787.8e4676ea.chunk.js.map"
+    "main.css": "/vs-my-playlist/static/css/main.333cb425.css",
+    "main.js": "/vs-my-playlist/static/js/main.f16481c9.js",
+    "static/js/787.7ca064a4.chunk.js": "/vs-my-playlist/static/js/787.7ca064a4.chunk.js",
+    "index.html": "/vs-my-playlist/index.html",
+    "main.333cb425.css.map": "/vs-my-playlist/static/css/main.333cb425.css.map",
+    "main.f16481c9.js.map": "/vs-my-playlist/static/js/main.f16481c9.js.map",
+    "787.7ca064a4.chunk.js.map": "/vs-my-playlist/static/js/787.7ca064a4.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.333cb425.css",
-    "static/js/main.64002be0.js"
+    "static/js/main.f16481c9.js"
   ]
 }
