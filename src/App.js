@@ -17,7 +17,7 @@ const REDIRECT_URI = "http://localhost:3000";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "token";
 const SCOPE = "playlist-read-private";
-const MINIMUM_PLAYLIST_SIZE = 25;
+const MINIMUM_PLAYLIST_SIZE = 15;
 
 function App() {
   const [token, setToken] = useState("");
@@ -98,19 +98,15 @@ function App() {
 
     if (!shouldRenderPlaylists) return null;
 
-    return (
-      <div className="playlists-container">
-        {playlists.map((playlist) => {
-          return (
-            <Playlist
-              key={playlist.id}
-              playlist={playlist}
-              onPlaylistClick={onPlaylistClick}
-            />
-          );
-        })}
-      </div>
-    );
+    return playlists.map((playlist) => {
+      return (
+        <Playlist
+          key={playlist.id}
+          playlist={playlist}
+          onPlaylistClick={onPlaylistClick}
+        />
+      );
+    });
   };
 
   const renderTracks = () => {
@@ -181,7 +177,6 @@ function App() {
             Sort any playlist based on track preferences
           </p>
         )}
-        {renderActionButton()}
       </>
     );
   };
@@ -232,15 +227,14 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2 className="title">{title}</h2>
-      </header>
-      <div>
+    <div className="wrapper">
+      <div className="header">{title}</div>
+      <div className="content">
+        {renderInfo()}
         {renderPlaylists()}
         {renderTracks()}
-        {renderInfo()}
       </div>
+      <div className="footer">{renderActionButton()}</div>
     </div>
   );
 }

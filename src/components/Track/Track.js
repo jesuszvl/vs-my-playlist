@@ -22,7 +22,7 @@ const Track = ({ track, onTrackClick }) => {
       <div className="track-info">
         <p className="track-name">{track.name}</p>
         <p className="track-artist">{track.artists[0].name}</p>
-        <p className="track-artist">{track.popularity}</p>
+        <p className="track-popularity">{track.popularity}%</p>
       </div>
     </div>
   );

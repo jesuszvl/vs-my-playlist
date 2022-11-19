@@ -25,12 +25,21 @@
   height: 150px;
 }
 
-.track-name {
-  margin-top: 0px;
-  font-weight: 800;
+.track-info {
   text-align: left;
 }
 
+.track-name {
+  margin: 0 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
 .track-artist {
-  text-align: left;
+  margin-top: 0;
+}
+
+.track-popularity {
+  font-size: 24px;
+  font-weight: bolder;
 }
