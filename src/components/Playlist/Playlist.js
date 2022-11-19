@@ -1,7 +1,6 @@
 import "./Playlist.css";
 
 const Playlist = ({ playlist, onPlaylistClick }) => {
-  console.log(playlist);
   return (
     <div
       className="playlist"

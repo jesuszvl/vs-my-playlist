@@ -6,7 +6,7 @@ const Track = ({ track, onTrackClick }) => {
 
   const handleClick = () => {
     setIsSelected(!isSelected);
-    //onTrackClick(track)
+    onTrackClick(track);
   };
 
   return (

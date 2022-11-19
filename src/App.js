@@ -26,6 +26,7 @@ function App() {
   const [title, setTitle] = useState(TITLES.NAME);
   const [backToPlaylist, setBackToPlaylist] = useState(false);
   const [soundId, setSoundId] = useState("");
+  const [selectedTrack, setSelectedTrack] = useState(null);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -79,7 +80,14 @@ function App() {
         Authorization: `Bearer ${token}`,
       },
     });
-    setTracks(data.items);
+
+    const max = data.items.length;
+    const min = 2;
+    const a = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const randomTracks = data.items.slice(a - 2, a);
+
+    setTracks(randomTracks);
     setBackToPlaylist(true);
   };
 
@@ -155,6 +163,11 @@ function App() {
                 Logout
               </button>
             )}
+            {selectedTrack && (
+              <button className="spotify-button" onClick={() => {}}>
+                Pick
+              </button>
+            )}
           </div>
         )}
       </>
@@ -167,18 +180,22 @@ function App() {
   };
 
   const onTrackClick = (track) => {
-    if (soundId) {
-      Howler.pause(soundId);
-      setSoundId("");
+    if (selectedTrack) {
+      setSelectedTrack(null);
     } else {
-      const sound = new Howl({
-        src: [track.preview_url],
-        html5: true,
-      });
-
-      const id = sound.play();
-      setSoundId(id);
+      setSelectedTrack(track);
     }
+    //if (soundId) {
+    //  Howler.pause(soundId);
+    //  setSoundId("");
+    //} else {
+    //  const sound = new Howl({
+    //    src: [track.preview_url],
+    //    html5: true,
+    //  });
+    //const id = sound.play();
+    //setSoundId(id);
+    //}
   };
 
   const backToPlaylistClick = () => {
