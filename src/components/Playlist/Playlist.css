@@ -10,6 +10,7 @@
 
 .playlist:hover {
   background-color: #1db954;
+  color: black;
 }
 
 .playlist-info {

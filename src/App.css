@@ -24,6 +24,11 @@ body {
 
 .action-buttons {
   display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .spotify-login {
@@ -34,10 +39,11 @@ body {
   padding: 10px 16px;
   border-radius: 30px;
 
-  height: 20px;
-  width: 140px;
-  font-size: 14px;
+  height: 25px;
+  width: 100%;
+  font-size: 20px;
   font-weight: 700;
+  margin: 16px;
 }
 
 .spotify-button {
@@ -47,11 +53,11 @@ body {
   padding: 10px 16px;
   border-radius: 30px;
 
-  height: 20px;
-  width: 120px;
-  font-size: 14px;
+  height: 25px;
+  width: 100%;
+  font-size: 20px;
   font-weight: 700;
-  margin: 24px;
+  margin: 16px;
   cursor: pointer;
 }
 

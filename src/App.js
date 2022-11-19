@@ -27,6 +27,7 @@ function App() {
   const [backToPlaylist, setBackToPlaylist] = useState(false);
   const [soundId, setSoundId] = useState("");
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -137,45 +138,57 @@ function App() {
     );
   };
 
+  const renderActionButton = () => {
+    const isLogin = !token;
+
+    const actionTitle = backToPlaylist
+      ? selectedTrack
+        ? "Next"
+        : "Back To Playlists"
+      : "Logout";
+
+    const handleActionClick = backToPlaylist
+      ? selectedTrack
+        ? onNextClick
+        : onBackToPlaylistClick
+      : onLogoutClick;
+
+    return (
+      <div className="action-buttons">
+        {isLogin ? (
+          <a
+            href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}
+            className="spotify-login"
+          >
+            Login with Spotify
+          </a>
+        ) : (
+          <div className="action-buttons">
+            <button className="spotify-button" onClick={handleActionClick}>
+              {actionTitle}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderInfo = () => {
     return (
       <>
-        {!token ? (
-          <>
-            <p className="subtitle">
-              Sort any playlist based on track preferences
-            </p>
-            <a
-              href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}
-              className="spotify-login"
-            >
-              Login with Spotify
-            </a>
-          </>
-        ) : (
-          <div className="action-buttons">
-            {backToPlaylist ? (
-              <button className="spotify-button" onClick={backToPlaylistClick}>
-                Back To Playlists
-              </button>
-            ) : (
-              <button className="spotify-button" onClick={logout}>
-                Logout
-              </button>
-            )}
-            {selectedTrack && (
-              <button className="spotify-button" onClick={() => {}}>
-                Pick
-              </button>
-            )}
-          </div>
+        {!token && (
+          <p className="subtitle">
+            Sort any playlist based on track preferences
+          </p>
         )}
+        {renderActionButton()}
       </>
     );
   };
 
   const onPlaylistClick = (playlist) => {
     getPlaylistTracks(playlist);
+    setSelectedPlaylist(playlist);
     setTitle(TITLES.TRACK);
   };
 
@@ -198,13 +211,20 @@ function App() {
     //}
   };
 
-  const backToPlaylistClick = () => {
+  const onNextClick = () => {
+    getPlaylistTracks(selectedPlaylist);
+    setSelectedTrack(null);
+  };
+
+  const onBackToPlaylistClick = () => {
     setTracks([]);
     setBackToPlaylist(false);
+    setSelectedTrack(null);
+    setSelectedPlaylist(null);
     setTitle(TITLES.PLAYLIST);
   };
 
-  const logout = () => {
+  const onLogoutClick = () => {
     setPlaylists([]);
     setToken("");
     setTitle(TITLES.NAME);
