@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
+
+import Playlist from "./components/Playlist";
+import Track from "./components/Track";
 
 const TITLES = {
-  NAME: "Versus My Playlist",
-  PLAYLIST: "Chose one playlist",
+  NAME: "Vs My Playlist",
+  PLAYLIST: "Pick a playlist",
   TRACK: "Pick the better song",
 };
 
-function App() {
-  const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
-  const REDIRECT_URI = "http://localhost:3000";
-  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-  const RESPONSE_TYPE = "token";
-  const SCOPE = "playlist-read-private";
-  const MINIMUM_PLAYLIST_SIZE = 25;
+const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
+const REDIRECT_URI = "http://localhost:3000";
+const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
+const RESPONSE_TYPE = "token";
+const SCOPE = "playlist-read-private";
+const MINIMUM_PLAYLIST_SIZE = 25;
 
+function App() {
   const [token, setToken] = useState("");
   const [playlists, setPlaylists] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [title, setTitle] = useState(TITLES.NAME);
   const [backToPlaylist, setBackToPlaylist] = useState(false);
+  const [soundId, setSoundId] = useState("");
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -80,46 +84,81 @@ function App() {
   };
 
   const renderPlaylists = () => {
-    return playlists.map((playlist) => {
-      return (
-        <div
-          className="spotify-playlist"
-          key={playlist.id}
-          onClick={() => onPlaylistClick(playlist)}
-        >
-          <img className="playlist-image" src={playlist.images[0].url} alt="" />
-          <span className="playlist-title">{playlist.name}</span>
-        </div>
-      );
-    });
+    const shouldRenderPlaylists =
+      playlists.length > 0 && tracks.length === 0 && token;
+
+    if (!shouldRenderPlaylists) return null;
+
+    return (
+      <div className="playlists-container">
+        {playlists.map((playlist) => {
+          return (
+            <Playlist
+              key={playlist.id}
+              playlist={playlist}
+              onPlaylistClick={onPlaylistClick}
+            />
+          );
+        })}
+      </div>
+    );
   };
 
   const renderTracks = () => {
+    const shouldRenderTracks = tracks.length !== 0 && token;
+
+    if (!shouldRenderTracks) return null;
+
     const max = tracks.length;
     const min = 2;
     const a = Math.floor(Math.random() * (max - min + 1)) + min;
 
-    return tracks.slice(a - 2, a).map((track) => {
-      const trackObj = track.track;
-      return (
-        <div
-          key={trackObj.id}
-          className="track"
-          onClick={() => onTrackClick(trackObj)}
-        >
-          <img
-            className="track-image"
-            src={trackObj.album.images[0].url}
-            alt={trackObj.name}
-          />
-          <div className="track-info">
-            <p className="track-name">{trackObj.name}</p>
-            <p className="track-artist">{trackObj.artists[0].name}</p>
-            <p className="track-artist">{trackObj.popularity}</p>
+    return (
+      <div className="tracks-container">
+        {tracks.slice(a - 2, a).map((track) => {
+          const trackObj = track.track;
+          return (
+            <Track
+              key={trackObj.id}
+              track={trackObj}
+              onTrackClick={onTrackClick}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderInfo = () => {
+    return (
+      <>
+        {!token ? (
+          <>
+            <p className="subtitle">
+              Sort any playlist based on track preferences
+            </p>
+            <a
+              href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}
+              className="spotify-login"
+            >
+              Login with Spotify
+            </a>
+          </>
+        ) : (
+          <div className="action-buttons">
+            {backToPlaylist ? (
+              <button className="spotify-button" onClick={backToPlaylistClick}>
+                Back To Playlists
+              </button>
+            ) : (
+              <button className="spotify-button" onClick={logout}>
+                Logout
+              </button>
+            )}
           </div>
-        </div>
-      );
-    });
+        )}
+      </>
+    );
   };
 
   const onPlaylistClick = (playlist) => {
@@ -128,12 +167,18 @@ function App() {
   };
 
   const onTrackClick = (track) => {
-    console.log(track);
-    const sound = new Howl({
-      src: [track.preview_url],
-      html5: true,
-    });
-    sound.play();
+    if (soundId) {
+      Howler.pause(soundId);
+      setSoundId("");
+    } else {
+      const sound = new Howl({
+        src: [track.preview_url],
+        html5: true,
+      });
+
+      const id = sound.play();
+      setSoundId(id);
+    }
   };
 
   const backToPlaylistClick = () => {
@@ -149,41 +194,16 @@ function App() {
     window.localStorage.removeItem("token");
   };
 
-  const shouldRenderPlaylists =
-    playlists.length > 0 && tracks.length === 0 && token;
-
-  const shouldRenderTracks = tracks.length !== 0 && token;
-
   return (
     <div className="App">
       <header className="App-header">
-        <h2>{title}</h2>
-        {shouldRenderPlaylists && (
-          <div className="playlists-container">{renderPlaylists()}</div>
-        )}
-        {shouldRenderTracks && (
-          <div className="tracks-container">{renderTracks()}</div>
-        )}
-        {!token ? (
-          <a
-            href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}
-            className="spotify-login"
-          >
-            Login with Spotify
-          </a>
-        ) : (
-          <div className="action-buttons">
-            {backToPlaylist && (
-              <button className="spotify-logout" onClick={backToPlaylistClick}>
-                Back To Playlists
-              </button>
-            )}
-            <button className="spotify-logout" onClick={logout}>
-              Logout
-            </button>
-          </div>
-        )}
+        <h2 className="title">{title}</h2>
       </header>
+      <div>
+        {renderPlaylists()}
+        {renderTracks()}
+        {renderInfo()}
+      </div>
     </div>
   );
 }

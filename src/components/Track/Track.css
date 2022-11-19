@@ -1,0 +1,36 @@
+.track {
+  display: flex;
+  padding: 16px;
+  gap: 16px;
+  color: white;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.track:hover {
+  background-color: #1db954;
+}
+
+.track-selected {
+  display: flex;
+  padding: 16px;
+  gap: 16px;
+  background-color: #1db954;
+  color: white;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.track-image {
+  height: 150px;
+}
+
+.track-name {
+  margin-top: 0px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.track-artist {
+  text-align: left;
+}
