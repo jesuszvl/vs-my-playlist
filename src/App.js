@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
-import { Howl, Howler } from "howler";
+import { Howl } from "howler";
 
 import Playlist from "./components/Playlist";
 import Track from "./components/Track";
@@ -10,7 +10,13 @@ import ActionButton from "./components/ActionButton";
 const TITLES = {
   NAME: "Vs My Playlist",
   PLAYLIST: "Pick a playlist",
-  TRACK: "Pick the better song",
+  TRACK: "Tap to hear a preview",
+};
+
+const ACTIONS = {
+  NEXT: "Pick song",
+  LOGOUT: "Logout",
+  PLAYLIST: "Back to playlist",
 };
 
 const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
@@ -141,9 +147,9 @@ function App() {
   const renderActionButton = () => {
     const actionTitle = backToPlaylist
       ? selectedTrack
-        ? "Next"
-        : "Back To Playlists"
-      : "Logout";
+        ? ACTIONS.NEXT
+        : ACTIONS.PLAYLIST
+      : ACTIONS.LOGOUT;
 
     const handleActionClick = backToPlaylist
       ? selectedTrack
