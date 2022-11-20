@@ -56,6 +56,7 @@ function App() {
       getUserPlaylists(token);
     }
     setToken(token);
+    console.log(process.env.NODE_ENV);
   }, []);
 
   const getUserPlaylists = async (token) => {
