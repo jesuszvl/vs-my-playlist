@@ -23,7 +23,7 @@ const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
 const REDIRECT_URI = "http://localhost:3000";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "token";
-const SCOPE = "playlist-read-private";
+const SCOPE = "playlist-read-private playlist-modify-private";
 const MINIMUM_PLAYLIST_SIZE = 10;
 
 function App() {
@@ -36,6 +36,8 @@ function App() {
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [soundObj, setSoundObj] = useState(null);
+  const [snapshot, setSnapshot] = useState("");
+  const [rangeStart, setRangeStart] = useState(0);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -96,8 +98,26 @@ function App() {
 
     const randomTracks = data.items.slice(a - 2, a);
 
+    setRangeStart(a - 1);
     setTracks(randomTracks);
     setBackToPlaylist(true);
+  };
+
+  const updatePlaylistTracks = async (playlist) => {
+    const bodyData = {
+      snapshot_id: snapshot,
+      range_start: rangeStart,
+      insert_before: rangeStart - 1,
+    };
+
+    const { data } = await axios.put(playlist.tracks.href, bodyData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    setSnapshot(data.snapshot_id);
+    getPlaylistTracks(playlist);
   };
 
   const renderPlaylists = () => {
@@ -163,7 +183,9 @@ function App() {
         onClick={handleActionClick}
         authHref={
           !token
-            ? `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`
+            ? `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(
+                SCOPE
+              )}`
             : null
         }
       />
@@ -185,6 +207,7 @@ function App() {
   const onPlaylistClick = (playlist) => {
     getPlaylistTracks(playlist);
     setSelectedPlaylist(playlist);
+    setSnapshot(playlist.snapshot_id);
     setTitle(TITLES.TRACK);
   };
 
@@ -215,7 +238,7 @@ function App() {
     const sound = new Howl({
       src: [track.preview_url],
       html5: true,
-      volume: 0.5,
+      volume: 0.4,
     });
 
     const id = sound.play();
@@ -224,9 +247,14 @@ function App() {
   };
 
   const onNextClick = () => {
+    const shouldUpdatePlaylist = selectedTrack.id === tracks[1].track.id;
+
     pauseTrackPreview();
-    getPlaylistTracks(selectedPlaylist);
-    console.log(selectedTrack?.name, selectedTrack?.id);
+    if (shouldUpdatePlaylist) {
+      updatePlaylistTracks(selectedPlaylist);
+    } else {
+      getPlaylistTracks(selectedPlaylist);
+    }
     setSelectedTrack(null);
   };
 
