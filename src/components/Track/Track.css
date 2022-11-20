@@ -9,6 +9,7 @@
 
 .track:hover {
   background-color: #1db954;
+  color: black;
 }
 
 .track-selected {

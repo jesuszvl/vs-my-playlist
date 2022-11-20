@@ -24,7 +24,7 @@ const REDIRECT_URI = "http://localhost:3000";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "token";
 const SCOPE = "playlist-read-private";
-const MINIMUM_PLAYLIST_SIZE = 20;
+const MINIMUM_PLAYLIST_SIZE = 10;
 
 function App() {
   const [token, setToken] = useState("");
