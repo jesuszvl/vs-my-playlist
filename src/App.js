@@ -7,28 +7,7 @@ import Playlist from "./components/Playlist";
 import Track from "./components/Track";
 import ActionButton from "./components/ActionButton";
 
-const TITLES = {
-  NAME: "Vs My Playlist",
-  PLAYLIST: "Pick a playlist",
-  TRACK: "Tap to hear a preview",
-};
-
-const ACTIONS = {
-  NEXT: "Pick song",
-  LOGOUT: "Logout",
-  PLAYLIST: "Back to playlist",
-};
-
-const isDevelopment = process.env.NODE_ENV === "development";
-
-const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
-const REDIRECT_URI = isDevelopment
-  ? "http://localhost:3000"
-  : "https://jesuszvl.github.io/vs-my-playlist/";
-const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-const RESPONSE_TYPE = "token";
-const SCOPE = "playlist-read-private playlist-modify-private";
-const MINIMUM_PLAYLIST_SIZE = 10;
+import { TITLES, ACTIONS, MINIMUM_PLAYLIST_SIZE, AUTH_HREF } from "./constants";
 
 function App() {
   const [token, setToken] = useState("");
@@ -185,13 +164,7 @@ function App() {
       <ActionButton
         title={actionTitle}
         onClick={handleActionClick}
-        authHref={
-          !token
-            ? `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(
-                SCOPE
-              )}`
-            : null
-        }
+        authHref={!token ? AUTH_HREF : null}
       />
     );
   };
