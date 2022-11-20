@@ -123,11 +123,13 @@ function App() {
       <div className="tracks-container">
         {tracks.slice(a - 2, a).map((track) => {
           const trackObj = track.track;
+          const isSelected = selectedTrack?.id === trackObj.id;
           return (
             <Track
               key={trackObj.id}
               track={trackObj}
               onTrackClick={onTrackClick}
+              isSelected={isSelected}
             />
           );
         })}
@@ -181,7 +183,11 @@ function App() {
 
   const onTrackClick = (track) => {
     if (selectedTrack) {
-      setSelectedTrack(null);
+      if (selectedTrack.id !== track.id) {
+        setSelectedTrack(track);
+      } else {
+        setSelectedTrack(null);
+      }
     } else {
       setSelectedTrack(track);
     }
@@ -200,6 +206,7 @@ function App() {
 
   const onNextClick = () => {
     getPlaylistTracks(selectedPlaylist);
+    console.log(selectedTrack?.name, selectedTrack?.id);
     setSelectedTrack(null);
   };
 

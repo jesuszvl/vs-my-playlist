@@ -1,11 +1,7 @@
-import { useState } from "react";
 import "./Track.css";
 
-const Track = ({ track, onTrackClick }) => {
-  const [isSelected, setIsSelected] = useState(false);
-
+const Track = ({ track, onTrackClick, isSelected }) => {
   const handleClick = () => {
-    setIsSelected(!isSelected);
     onTrackClick(track);
   };
 
