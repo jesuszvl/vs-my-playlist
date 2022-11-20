@@ -19,8 +19,12 @@ const ACTIONS = {
   PLAYLIST: "Back to playlist",
 };
 
+const isDevelopment = process.env.NODE_ENV === "development";
+
 const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
-const REDIRECT_URI = "http://localhost:3000";
+const REDIRECT_URI = isDevelopment
+  ? "http://localhost:3000"
+  : "https://jesuszvl.github.io/vs-my-playlist/";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "token";
 const SCOPE = "playlist-read-private playlist-modify-private";
@@ -56,7 +60,6 @@ function App() {
       getUserPlaylists(token);
     }
     setToken(token);
-    console.log(process.env.NODE_ENV);
   }, []);
 
   const getUserPlaylists = async (token) => {
