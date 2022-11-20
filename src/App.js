@@ -29,6 +29,7 @@ function App() {
   const [soundId, setSoundId] = useState("");
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [soundObj, setSoundObj] = useState(null);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -185,26 +186,38 @@ function App() {
     if (selectedTrack) {
       if (selectedTrack.id !== track.id) {
         setSelectedTrack(track);
+        playTrackPreview(track);
       } else {
         setSelectedTrack(null);
+        pauseTrackPreview();
       }
     } else {
       setSelectedTrack(track);
+      playTrackPreview(track);
     }
-    //if (soundId) {
-    //  Howler.pause(soundId);
-    //  setSoundId("");
-    //} else {
-    //  const sound = new Howl({
-    //    src: [track.preview_url],
-    //    html5: true,
-    //  });
-    //const id = sound.play();
-    //setSoundId(id);
-    //}
+  };
+
+  const pauseTrackPreview = () => {
+    if (soundId) {
+      soundObj.pause(soundId);
+    }
+  };
+
+  const playTrackPreview = (track) => {
+    pauseTrackPreview();
+
+    const sound = new Howl({
+      src: [track.preview_url],
+      html5: true,
+    });
+
+    const id = sound.play();
+    setSoundId(id);
+    setSoundObj(sound);
   };
 
   const onNextClick = () => {
+    pauseTrackPreview();
     getPlaylistTracks(selectedPlaylist);
     console.log(selectedTrack?.name, selectedTrack?.id);
     setSelectedTrack(null);
