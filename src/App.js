@@ -5,6 +5,7 @@ import { Howl, Howler } from "howler";
 
 import Playlist from "./components/Playlist";
 import Track from "./components/Track";
+import ActionButton from "./components/ActionButton";
 
 const TITLES = {
   NAME: "Vs My Playlist",
@@ -13,11 +14,11 @@ const TITLES = {
 };
 
 const CLIENT_ID = "ad1d9256da1648fe842417e4533e59e8";
-const REDIRECT_URI = "https://jesuszvl.github.io/vs-my-playlist/";
+const REDIRECT_URI = "http://localhost:3000";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const RESPONSE_TYPE = "token";
 const SCOPE = "playlist-read-private";
-const MINIMUM_PLAYLIST_SIZE = 15;
+const MINIMUM_PLAYLIST_SIZE = 20;
 
 function App() {
   const [token, setToken] = useState("");
@@ -135,8 +136,6 @@ function App() {
   };
 
   const renderActionButton = () => {
-    const isLogin = !token;
-
     const actionTitle = backToPlaylist
       ? selectedTrack
         ? "Next"
@@ -150,22 +149,15 @@ function App() {
       : onLogoutClick;
 
     return (
-      <div className="action-buttons">
-        {isLogin ? (
-          <a
-            href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}
-            className="spotify-login"
-          >
-            Login with Spotify
-          </a>
-        ) : (
-          <div className="action-buttons">
-            <button className="spotify-button" onClick={handleActionClick}>
-              {actionTitle}
-            </button>
-          </div>
-        )}
-      </div>
+      <ActionButton
+        title={actionTitle}
+        onClick={handleActionClick}
+        authHref={
+          !token
+            ? `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`
+            : null
+        }
+      />
     );
   };
 

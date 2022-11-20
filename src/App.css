@@ -34,54 +34,6 @@ body {
   padding: 16px;
 }
 
-.action-buttons {
-  display: flex;
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-
-  background-color: #282c34;
-  border-top: 1px solid rgba(0, 0, 0, 0.5);
-}
-
-.spotify-login {
-  text-decoration: none;
-
-  color: white;
-  background-color: #1db954;
-  padding: 10px 16px;
-  border-radius: 30px;
-
-  height: 25px;
-  width: 100%;
-  font-size: 20px;
-  font-weight: 700;
-  margin: 16px;
-}
-
-.spotify-button {
-  all: unset;
-  color: white;
-  background-color: #1db954;
-  padding: 10px 16px;
-  border-radius: 30px;
-
-  height: 25px;
-  width: 100%;
-  font-size: 20px;
-  font-weight: 700;
-  margin: 16px;
-  cursor: pointer;
-}
-
-.spotify-button:hover {
-  background-color: #1ed760;
-}
-
-.spotify-button:active {
-  background-color: #2e6140;
-}
-
 .tracks-container {
   display: flex;
   flex-direction: column;
