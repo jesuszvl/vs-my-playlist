@@ -215,6 +215,7 @@ function App() {
     const sound = new Howl({
       src: [track.preview_url],
       html5: true,
+      volume: 0.5,
     });
 
     const id = sound.play();
