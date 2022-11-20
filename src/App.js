@@ -105,7 +105,7 @@ function App() {
 
   const updatePlaylistTracks = async (playlist) => {
     const bodyData = {
-      snapshot_id: playlist.snapshot_id,
+      snapshot_id: snapshot,
       range_start: rangeStart,
       insert_before: rangeStart - 1,
     };
@@ -117,6 +117,7 @@ function App() {
       },
     });
     setSnapshot(data.snapshot_id);
+    getPlaylistTracks(playlist);
   };
 
   const renderPlaylists = () => {
@@ -206,6 +207,7 @@ function App() {
   const onPlaylistClick = (playlist) => {
     getPlaylistTracks(playlist);
     setSelectedPlaylist(playlist);
+    setSnapshot(playlist.snapshot_id);
     setTitle(TITLES.TRACK);
   };
 
@@ -248,8 +250,11 @@ function App() {
     const shouldUpdatePlaylist = selectedTrack.id === tracks[1].track.id;
 
     pauseTrackPreview();
-    if (shouldUpdatePlaylist) updatePlaylistTracks(selectedPlaylist);
-    getPlaylistTracks(selectedPlaylist);
+    if (shouldUpdatePlaylist) {
+      updatePlaylistTracks(selectedPlaylist);
+    } else {
+      getPlaylistTracks(selectedPlaylist);
+    }
     setSelectedTrack(null);
   };
 
