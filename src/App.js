@@ -35,7 +35,7 @@ function App() {
 
       window.location.hash = "";
       window.localStorage.setItem("token", token);
-    } else {
+    } else if (token) {
       getUserPlaylists(token);
     }
     setToken(token);
@@ -99,6 +99,7 @@ function App() {
         "Content-Type": "application/json",
       },
     });
+
     setSnapshot(data.snapshot_id);
     getPlaylistTracks(playlist);
   };
@@ -215,7 +216,7 @@ function App() {
     const sound = new Howl({
       src: [track.preview_url],
       html5: true,
-      volume: 0.4,
+      volume: 0.5,
     });
 
     const id = sound.play();

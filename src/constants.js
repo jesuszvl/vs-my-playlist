@@ -20,8 +20,8 @@ const REDIRECT_URI = isDevelopment
   ? "http://localhost:3000"
   : "https://jesuszvl.github.io/vs-my-playlist/";
 const RESPONSE_TYPE = "token";
-const SCOPE = "playlist-read-private playlist-modify-private";
+const SCOPE = encodeURIComponent(
+  "playlist-read-private playlist-modify-private playlist-modify-public"
+);
 
-export const AUTH_HREF = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(
-  SCOPE
-)}`;
+export const AUTH_HREF = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
