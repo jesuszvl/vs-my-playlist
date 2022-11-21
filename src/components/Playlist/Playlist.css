@@ -25,12 +25,14 @@
 }
 
 .playlist-image {
-  height: 80px;
+  height: 100px;
+  border: 2px solid black;
 }
 
 .playlist-title {
+  margin: 0 0;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .playlist-size {
