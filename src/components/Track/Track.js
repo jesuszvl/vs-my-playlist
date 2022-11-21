@@ -5,6 +5,13 @@ const Track = ({ track, onTrackClick, isSelected }) => {
     onTrackClick(track);
   };
 
+  const getArtistsName = () => {
+    const artists = track.artists.map((artist) => {
+      return artist.name;
+    });
+    return artists.join(", ");
+  };
+
   return (
     <div
       className={isSelected ? "track-selected" : "track"}
@@ -17,7 +24,7 @@ const Track = ({ track, onTrackClick, isSelected }) => {
       />
       <div className="track-info">
         <p className="track-name">{track.name}</p>
-        <p className="track-artist">{track.artists[0].name}</p>
+        <p className="track-artist">{getArtistsName()}</p>
         <p className="track-popularity">{track.popularity}%</p>
       </div>
     </div>
