@@ -3,6 +3,8 @@ import "./App.css";
 import axios from "axios";
 import { Howl } from "howler";
 
+import { RotatingLines } from "react-loader-spinner";
+
 import Playlist from "./components/Playlist";
 import Track from "./components/Track";
 import ActionButton from "./components/ActionButton";
@@ -21,6 +23,7 @@ function App() {
   const [soundObj, setSoundObj] = useState(null);
   const [snapshot, setSnapshot] = useState("");
   const [rangeStart, setRangeStart] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -43,6 +46,7 @@ function App() {
 
   const getUserPlaylists = async (token) => {
     try {
+      setIsLoading(true);
       const { data } = await axios.get(
         "https://api.spotify.com/v1/me/playlists",
         {
@@ -66,6 +70,7 @@ function App() {
       );
       setPlaylists(sortedPlaylist);
       setTitle(TITLES.PLAYLIST);
+      setIsLoading(false);
     } catch (error) {
       console.log(error.response.data.error);
       window.localStorage.removeItem("token");
@@ -73,6 +78,7 @@ function App() {
   };
 
   const getPlaylistTracks = async (playlist) => {
+    setIsLoading(true);
     const { data } = await axios.get(playlist.tracks.href, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -88,6 +94,7 @@ function App() {
     setRangeStart(a - 1);
     setTracks(randomTracks);
     setBackToPlaylist(true);
+    setIsLoading(false);
   };
 
   const updatePlaylistTracks = async (playlist) => {
@@ -255,13 +262,32 @@ function App() {
     window.localStorage.removeItem("token");
   };
 
+  const renderContent = () => {
+    return (
+      <>
+        {renderInfo()}
+        {renderPlaylists()}
+        {renderTracks()}
+      </>
+    );
+  };
+
   return (
     <div className="wrapper">
       <div className="header">{title}</div>
       <div className="content">
-        {renderInfo()}
-        {renderPlaylists()}
-        {renderTracks()}
+        {isLoading && (
+          <div className="loader-container">
+            <RotatingLines
+              strokeColor="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="80"
+              visible={true}
+            />
+          </div>
+        )}
+        {!isLoading && renderContent()}
       </div>
       <div className="footer">{renderActionButton()}</div>
     </div>
