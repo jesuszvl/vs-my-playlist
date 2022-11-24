@@ -42,30 +42,34 @@ function App() {
   }, []);
 
   const getUserPlaylists = async (token) => {
-    const { data } = await axios.get(
-      "https://api.spotify.com/v1/me/playlists",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          limit: 50,
-        },
-      }
-    );
+    try {
+      const { data } = await axios.get(
+        "https://api.spotify.com/v1/me/playlists",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            limit: 50,
+          },
+        }
+      );
 
-    const filteredPlaylists = data.items.filter(
-      (playlist) =>
-        playlist.tracks.total >= MINIMUM_PLAYLIST_SIZE &&
-        playlist.owner.id !== "spotify"
-    );
+      const filteredPlaylists = data.items.filter(
+        (playlist) =>
+          playlist.tracks.total >= MINIMUM_PLAYLIST_SIZE &&
+          playlist.owner.id !== "spotify"
+      );
 
-    const sortedPlaylist = filteredPlaylists.sort(
-      (a, b) => b.tracks.total - a.tracks.total
-    );
-
-    setPlaylists(sortedPlaylist);
-    setTitle(TITLES.PLAYLIST);
+      const sortedPlaylist = filteredPlaylists.sort(
+        (a, b) => b.tracks.total - a.tracks.total
+      );
+      setPlaylists(sortedPlaylist);
+      setTitle(TITLES.PLAYLIST);
+    } catch (error) {
+      console.log(error.response.data.error);
+      window.localStorage.removeItem("token");
+    }
   };
 
   const getPlaylistTracks = async (playlist) => {
