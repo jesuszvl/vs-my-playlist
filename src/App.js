@@ -74,6 +74,7 @@ function App() {
     } catch (error) {
       console.log(error.response.data.error);
       window.localStorage.removeItem("token");
+      setIsLoading(false);
     }
   };
 
